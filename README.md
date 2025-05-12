@@ -160,5 +160,31 @@ Type Your Message
 
 ## Лабораторная работа №7
 
-В процессе
+cd ./Mappedbus-master
+java --add-exports java.base/sun.nio.ch=ALL-UNNAMED --add-exports jdk.unsupported/sun.misc=ALL-UNNAMED -cp "out" io.mappedbus.sample.object.ObjectReader
+java --add-exports java.base/sun.nio.ch=ALL-UNNAMED --add-exports jdk.unsupported/sun.misc=ALL-UNNAMED -cp "out" io.mappedbus.sample.object.ObjectWriter 0
+java --add-exports java.base/sun.nio.ch=ALL-UNNAMED --add-exports jdk.unsupported/sun.misc=ALL-UNNAMED -cp "out" io.mappedbus.sample.object.ObjectWriter 1
 
+Запускается 2 ObjectWriter, которые пишут данные в memory mapped файл. После этого запускается ObjectReader, считывающий данные из этого файла, при этом выводя данные в консоль:
+Read: PriceUpdate [source=0, price=146, quantity=292], hasRecovered=true
+Read: PriceUpdate [source=1, price=136, quantity=272], hasRecovered=true
+Read: PriceUpdate [source=0, price=148, quantity=296], hasRecovered=true
+Read: PriceUpdate [source=1, price=138, quantity=276], hasRecovered=true
+Read: PriceUpdate [source=0, price=150, quantity=300], hasRecovered=true
+Read: PriceUpdate [source=1, price=140, quantity=280], hasRecovered=true
+Read: PriceUpdate [source=0, price=152, quantity=304], hasRecovered=true
+Read: PriceUpdate [source=1, price=142, quantity=284], hasRecovered=true
+Read: PriceUpdate [source=0, price=154, quantity=308], hasRecovered=true
+Read: PriceUpdate [source=1, price=144, quantity=288], hasRecovered=true
+Read: PriceUpdate [source=0, price=156, quantity=312], hasRecovered=true
+Read: PriceUpdate [source=1, price=146, quantity=292], hasRecovered=true
+
+
+Как видно, считываются одновременно 2 различных источника. При этом если остановить один процесс ObjectWriter, то записывать будет уже один источник:
+Read: PriceUpdate [source=1, price=196, quantity=392], hasRecovered=true
+Read: PriceUpdate [source=1, price=198, quantity=396], hasRecovered=true
+Read: PriceUpdate [source=1, price=200, quantity=400], hasRecovered=true
+Read: PriceUpdate [source=1, price=202, quantity=404], hasRecovered=true
+Read: PriceUpdate [source=1, price=204, quantity=408], hasRecovered=true
+Read: PriceUpdate [source=1, price=206, quantity=412], hasRecovered=true
+Read: PriceUpdate [source=1, price=208, quantity=416], hasRecovered=true

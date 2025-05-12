@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="dist">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/Mappedbus-master/dist/mappedbus-0.4.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Mappedbus-master/dist/mappedbus-0.5.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Mappedbus-master/dist/mappedbus-0.5.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
