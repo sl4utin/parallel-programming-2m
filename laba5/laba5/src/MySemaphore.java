@@ -3,13 +3,14 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class MySemaphore extends Semaphore {
+
     private final ReentrantLock lock = new ReentrantLock();
     private final Condition permitsAvailable = lock.newCondition();
     private int permits;
 
-    public MySemaphore(int permits) {
-        super(permits);
-        this.permits = permits;
+    public MySemaphore(int initialPermits) {
+        super(initialPermits); // для совместимости
+        this.permits = initialPermits;
     }
 
     @Override
@@ -17,9 +18,9 @@ public class MySemaphore extends Semaphore {
         lock.lock();
         try {
             while (permits <= 0) {
-                permitsAvailable.await();
+                permitsAvailable.await(); // ждём доступного разрешения
             }
-            permits--;
+            permits--; // получаем разрешение
         } finally {
             lock.unlock();
         }
@@ -29,8 +30,8 @@ public class MySemaphore extends Semaphore {
     public void release() {
         lock.lock();
         try {
-            permits++;
-            permitsAvailable.signal();
+            permits++; // возвращаем разрешение
+            permitsAvailable.signal(); // будим один поток
         } finally {
             lock.unlock();
         }
