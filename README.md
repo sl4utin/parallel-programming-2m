@@ -26,68 +26,34 @@
 
 ## Лабораторная работа №4
 
-Были рассмотрены 4 коллекции. Использовалось 30 потоков.
+Были рассмотрены 4 коллекции. Использовалось 50 потоков.
 
-При работе с HashMap случались ошибки, связанные с конкурентным доступом к определенным ресурсам:
-
-java.util.HashMapError during access in collection:
-java.util.HashMap by pool-1-thread-22
-Error during access in collection:
-java.util.HashMap by pool-1-thread-24
-Error during access in collection:
-java.util.HashMap by pool-1-thread-7
-Error during access in collection:
-java.util.HashMap by pool-2-thread-2
-
-Результат исполнения кода с HaspMap:
-Sample 0: Total sum: 2607881, expected: 3000000
-Sample 1: Total sum: 2641646, expected: 3000000
-Sample 2: Total sum: 2580381, expected: 3000000
-Sample 3: Total sum: 2693908, expected: 3000000
-Sample 4: Total sum: 2566976, expected: 3000000
-
-Такие результаты безусловно связаны с тем, что HaspMap является потоконебезопасной коллекцией и не может обеспечить корректный результат при параллельном выполнения, когда нужен конкурентный доступ нескольких потоков к ресурсу.
-
-Результат исполнения кода с Hashtable:
-Sample 0: Total sum: 3000000, expected: 3000000
-Sample 1: Total sum: 3000000, expected: 3000000
-Sample 2: Total sum: 3000000, expected: 3000000
-Sample 3: Total sum: 3000000, expected: 3000000
-Sample 4: Total sum: 3000000, expected: 3000000
+При работе с HashMap случались ошибки, связанные с конкурентным доступом к определенным ресурсам
 
 Hashtable уже является потокобезопасной коллекцией и может обеспечить корректный результат при конкурентном доступе к бакетам.
 
-Результат исполнения кода с Collections.synchronizedMap:
-Sample 0: Total sum: 3000000, expected: 3000000
-Sample 1: Total sum: 3000000, expected: 3000000
-Sample 2: Total sum: 3000000, expected: 3000000
-Sample 3: Total sum: 3000000, expected: 3000000
-Sample 4: Total sum: 3000000, expected: 3000000
-
 Collections.synchronizedMap также является потокобезопасной коллекцией и может обеспечить корректный результат при конкурентном доступе.
-
-Результат исполнения кода с ConcurrentHashMap:
-Sample 0: Total sum: 3000000, expected: 3000000
-Sample 1: Total sum: 3000000, expected: 3000000
-Sample 2: Total sum: 3000000, expected: 3000000
-Sample 3: Total sum: 3000000, expected: 3000000
-Sample 4: Total sum: 3000000, expected: 3000000
 
 ConcurrentHashMap также является потокобезопасной коллекцией и может обеспечить корректный результат при конкурентном доступе.
 
-Также было произведено сравнение времени выполнения кода при использовании различных коллекций:
+Также было произведено сравнение времени выполнения кода при использовании различных коллекций и кол-во ошибках при их работе:
+Collections:
+	java.util.HashMap...done. Errors: 89
+	java.util.Hashtable...done. Errors: 0
+	java.util.Collections$SynchronizedMap...done. Errors: 0
+	java.util.concurrent.ConcurrentHashMap...done. Errors: 0
 Execution times:
-HashMap: 0,226 s,
-HashTable: 1,341 s,
-SyncMap: 1,232 s,
-ConcurrentHashMap: 0,207 s.
+	HashMap: 0,067 s,
+	HashTable: 0,270 s,
+	SyncMap: 0,153 s,
+	ConcurrentHashMap: 0,014 s.
 
 Как видно из результатов, HashMap не стоит использовать, когда необходима коллекция, к которой будет конкурентный доступ. Наиболее быстрой и при этом безопасной коллекцией является ConcurrentHashMap. Связано это с тем, что в отличие от HashTable и synchronizedMap, которые блокируются полностью при доступе к ним, в ConcurrentHashMap блокируются лишь отдельные бакеты, что позволяет другим потокам в это время вести работу с другими бакетами.
 
 
 ## Лабораторная работа №5
 
-Созданы 2 реализации семафора коллекции - с применением ReentrantLock и с применением мониторов (synchronized методов). Использовалось 7 потоков, а вместимость семафора была задана равной 3.
+Создана реализации семафора коллекции - с применением ReentrantLock и с применением мониторов (synchronized методов). Использовалось 7 потоков, а вместимость семафора была задана равной 3.
 
 Результат работы программы:
 
@@ -111,17 +77,7 @@ My semaphore:
 Поток pool-2-thread-7 работает. Активных потоков: 3
 Максимальное количество активных потоков: 3
 
-My semaphore without lock:
-Поток pool-3-thread-1 работает. Активных потоков: 1
-Поток pool-3-thread-2 работает. Активных потоков: 2
-Поток pool-3-thread-3 работает. Активных потоков: 3
-Поток pool-3-thread-4 работает. Активных потоков: 1
-Поток pool-3-thread-5 работает. Активных потоков: 3
-Поток pool-3-thread-6 работает. Активных потоков: 2
-Поток pool-3-thread-7 работает. Активных потоков: 1
-Максимальное количество активных потоков: 3
-
-Как видно из результатов, все 3 семафора работают корректно и обеспечивают ограничение на максимальное количество активных потоков.
+Как видно из результатов, оба семафора работают корректно и обеспечивают ограничение на максимальное количество активных потоков.
 
 
 ## Лабораторная работа №6
@@ -161,9 +117,9 @@ Type Your Message
 ## Лабораторная работа №7
 
 cd ./Mappedbus-master
-java --add-exports java.base/sun.nio.ch=ALL-UNNAMED --add-exports jdk.unsupported/sun.misc=ALL-UNNAMED -cp "out" io.mappedbus.sample.object.ObjectReader
-java --add-exports java.base/sun.nio.ch=ALL-UNNAMED --add-exports jdk.unsupported/sun.misc=ALL-UNNAMED -cp "out" io.mappedbus.sample.object.ObjectWriter 0
-java --add-exports java.base/sun.nio.ch=ALL-UNNAMED --add-exports jdk.unsupported/sun.misc=ALL-UNNAMED -cp "out" io.mappedbus.sample.object.ObjectWriter 1
+java --add-exports -cp "out" io.mappedbus.sample.object.ObjectReader
+java --add-exports -cp "out" io.mappedbus.sample.object.ObjectWriter 0
+java --add-exports -cp "out" io.mappedbus.sample.object.ObjectWriter 1
 
 Запускается 2 ObjectWriter, которые пишут данные в memory mapped файл. После этого запускается ObjectReader, считывающий данные из этого файла, при этом выводя данные в консоль:
 Read: PriceUpdate [source=0, price=146, quantity=292], hasRecovered=true
